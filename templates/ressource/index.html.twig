@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | ressources{% endblock %}
+
+{% block body %}
+
+    <div class="text-center mt-3">
+        <h1>Toutes les ressources</h1>
+
+        {% for message in app.flashes('success') %}
+
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+        <br>
+
+        {% if role == "ROLE_ADMIN" %}
+            <div class="card-group justify-content-lg-center">
+                <div class="col-md-3 text-center">
+                    <a href="/ressource/new" class="btn btn-primary">Nouvelle ressource</a>
+                </div>
+                <div class="col-md-4 text-center">
+                    <a href="/admin/ressource" class="btn btn-warning">Éditer</a>
+                </div>
+            </div>
+            {% else %}
+                <div class="card-group justify-content-lg-center">
+                    <div class="col-md-3 text-center">
+                        <a href="/ressource/new" class="btn btn-primary">Nouvelle ressource</a>
+                    </div>
+                </div>
+        {% endif %}
+
+        <br>
+        <br>
+
+        <div class="row flex">
+            {% for ressource in ressources %}
+                <div class="col-3">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            {{ ressource.category }}
+                        </div>
+{#                        {{ dump(ressource.ressourcePicture) }}#}
+                        <img src="/pictures/ressources/{{ ressource.ressourcePicture }}" class="img-fluid img-thumbnail" alt="ressourceImage">
+
+{#                        <img class="card-img-top" src="/pictures/ressource/{{ ressource.ressourcePicture }}" alt="Card image cap">#}
+                        <div class="card-body">
+                            <div class="card-title">
+                                <h5>
+                                    {% for ra in ressource.ressourceAttributes %}
+                                        {{ ra.value }}
+                                        {% if ressource.category.categoryAttributes[loop.index - 1].unity != null%}
+                                            {{ ressource.category.categoryAttributes[loop.index - 1].unity.symbol }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </h5>
+
+                            </div>
+                            <p class="card-text">{{ ressource.description }}</p>
+
+{#                            <a href="{{ path('proposal.new', {ressource_id: ressource.id}) }}" class="href">Choisir</a>#}
+                            <a href="{{ path('proposal.new', {ressId: ressource.id}) }}" class="btn btn-primary">Offrir/Demander</a>
+{#                            <a href="#" class="btn btn-primary">Offrir</a>#}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
+

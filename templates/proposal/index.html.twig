@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | propositions{% endblock %}
+
+{% block body %}
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            // The location of Uluru
+            const uluru = { lat: -25.344, lng: 131.036 };
+            // The map, centered at Uluru
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 4,
+                center: uluru,
+            });
+            // The marker, positioned at Uluru
+            const marker = new google.maps.Marker({
+                position: uluru,
+                map: map,
+            });
+        }
+    </script>
+
+    <div class="row-fluid top30 pagetitle mt-3">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-4">
+                    <h1>Offres & Demandes </h1>
+                </div>
+                <div class="col-4 mt-2">
+                    <div class="input-group">
+                        <span class="input-group-text" id="basic-addon1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                            </svg>
+                        </span>
+                        <input type="text" class="form-control" placeholder="Recherche par mot-clé" name="srch-term" id="srch-term">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" type="submit">go<i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 mt-2 text-center">
+                    <a href="{{ path('proposal.new') }}" class="btn btn-secondary" >Faire une offre/demande</a>
+                </div>
+                <div class="col-1 mt-2 text-center">
+                    <a href="{{ path('admin.proposal') }}" class="btn btn-warning" >Éditer</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="container">
+        <div id="pathCategory">
+{#            <p >Chercher parmi :</p>#}
+        </div>
+        <div id="choixCategory" class="container mt-2">
+            <div class="row">
+                <div class="col-4">
+                    <div class="category">
+                        {% for category in categorymother %}
+                            <div class="row mt-2">
+                                <button type="button" class="btn categ btn-outline-primary">{{ category }}<p class="idCateg" hidden>{{category.id }}</p></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if category %}
+                    <div class="col-4">
+                        <div class="attributes">
+                            {% for attribute in category.categoryAttributes %}
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">{{ attribute.name }}</label>
+                                    </div>
+                                    <select class="custom-select" id="{{ attribute.id }}">
+                                        <option selected></option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+
+                            {% endfor %}
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nom</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-4 mt-5">
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="submit text-center">Done</div>
+    </div>
+
+    <div class="container mt-5">
+
+        {% for message in app.flashes('success') %}
+
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+        <table class="table table-striped" id="tableProposals">
+        </table>
+
+        <br>
+
+            {% if proposals is empty %}
+                <div class="text-center">
+                    <p>Il n'y a pas de propositions pour l'instant :(</p>
+                </div>
+            {% endif %}
+            <br>
+    </div>
+
+    {#----------------------------------------------------JAVASCRIPT-----------------------------------------------------------#}
+
+{#    Intégration de Jquery#}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+
+    <script>
+
+        console.log("bonsoir")
+
+        $(document).ready(function(){
+            // évenement sur les boutons du choix des catégories pour afficher les catégories enfants
+            var id = document.getElementsByClassName("idCateg")
+            var boutons = document.getElementsByClassName("btn categ")
+
+            $("#tableProposals").load("proposal/tableProposals/")
+
+            for (i = 0; i < boutons.length; i++){
+                console.log(i)
+                boutons[i].n = i
+                boutons[i].addEventListener("click", affiche)
+            }
+
+        })
+
+        // la boucle qui régénere l'évenement des boutons pour pouvoir continuer à choisir d'autres
+        function loop(){
+            $(document).ready(function(){
+                var id = document.getElementsByClassName("idCateg")
+                var boutons = document.getElementsByClassName("btn categ")
+
+                // console.log(id[4].innerText)
+
+                for (i = 0; i < boutons.length; i++){
+                    console.log(i)
+                    boutons[i].n = i
+                    boutons[i].addEventListener("click", affiche)
+                }
+
+            })
+        }
+
+        // l'évenement qui affiche le chemin des catégories selectionnées en cascade
+        function affiche(e) {
+            e.stopPropagation()
+            e.preventDefault()
+            var id = e.target.getElementsByClassName("idCateg")[0].innerHTML
+            console.log(id)
+
+            // selector avec la div ou on veut loader lélément
+            $("#pathCategory").load("category/pathCategory/" + id)
+            // $("#cheminCategory").load("proposal/" + id)
+
+            $("#choixCategory").load("category/choiceCategory/" + id, loop)
+
+            $("#tableProposals").load("proposal/tableProposals/" + id)
+
+        }
+
+        // selecteur avec tout le jquery de la page dans la function appelée dans ready
+
+        let map;
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 8,
+            });
+        }
+
+        // Évenement qui permet de développer le tree des catégories
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function() {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                console.log(this.parentElement)
+                // this.parentElement.innerText = "Bang Bang"
+                this.classList.toggle("caret-down");
+            });
+        }
+
+    </script>
+
+{% endblock %}

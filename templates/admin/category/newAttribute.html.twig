@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | Ajout attributs{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+        <a href="{{ path('admin.category') }}" class="btn btn-primary">Retour aux catégories</a>
+
+        <h1>Nouvelle catégorie : {{ category.mother}} > {{ category.name }}</h1>
+
+        <div class="container text-center" >
+            <div class="border-left"></div><h3>Attributs</h3>
+
+            {% for attribute in attributes %}
+                <div class="col-auto">
+                    {{ attribute.name }} {% if attribute.unity %}[{{ attribute.unity.symbol }}] {% endif %}
+                </div>
+            {% endfor %}
+
+            {{ form_start(form_cat_attr) }}
+
+            {{ form_end(form_cat_attr) }}
+        </div>
+
+        {{ form_start(form_unit) }}
+        {{ form_rest(form_unit) }}
+
+        <button class="btn-primary mt-4">Boudoum</button>
+        {{ form_end(form_unit) }}
+
+
+    </div>
+
+{% endblock %}

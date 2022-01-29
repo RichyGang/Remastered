@@ -1,0 +1,222 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | propositions{% endblock %}
+
+{% block body %}
+
+<div class="container mt-3">
+    <h2>Nouvelle proposition</h2>
+</div>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-10">
+                <div id="pathCategory">
+                    {% if path %}
+                        {{ path }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-2">
+                {% if category %}
+                    <a href="{{path('ressource.new')}}" class="btn btn-outline-dark">Ajouter {{ category.name}} </a>
+                {% else %}
+                    <a href="{{path('ressource.new')}}" class="btn btn-outline-dark">Ajouter une ressource</a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    {% if category == null and ressource == null %}
+
+        <div id="choixCategory" class="container mt-5">
+            <div class="row">
+                <div class="col-4">
+                    <div class="category">
+                        {% for category in categorymother %}
+                            <div class="row mt-2">
+                                <button type="button" class="btn categ btn-outline-primary">{{ category }}<p class="idCateg" hidden>{{category.id }}</p></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if category %}
+                    <div class="col-4">
+                        <div class="attributes">
+                            {% for attribute in category.categoryAttributes %}
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">{{ attribute.name }}</label>
+                                    </div>
+                                    <select class="custom-select" id="{{ attribute.id }}">
+                                        <option selected></option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                            {% endfor %}
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nom</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                            </div>
+
+                        </div>
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {#        SI ON A LA CATÉGORIE#}
+    {% elseif category != null %}
+
+        {#        CHEMIN CATÉGORIE#}
+        <div class="container">
+            <div id="cheminCategory">
+                <p hidden id="categId">{{ category.id }}</p>
+                {% if category %}
+                    {{ category.mother }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="container text-center">
+            <div class="col-12 ">
+                <a href="{{ path('ressource.new') }}" class="btn btn-outline-dark">Ajouter {{ category.name }}</a>
+            </div>
+        </div>
+
+        {% if category != null and ressources == null %}
+            <br>
+            Aucune ressource trouvée pour cette catégorie : <a href="{{ path('ressource.new') }}">Ajouter</a>
+            <br>
+        {% else %}
+
+
+        {% endif %}
+    {% endif %}
+
+    <div class="container" id="tableRessources">
+    </div>
+
+    {#    SI ON A LA RESSOURCE#}
+    {% if ressource != null %}
+        {#        AFFICHAGE RESSOURCE#}
+
+
+        <div class="content-admin-dashboard">
+            <div class="container">
+            </div>
+            <div class="container content-admin-list  mt-4">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h2>{{ ressource.category }}</h2>
+                        {% for ra in ressource.ressourceAttributes %}
+                            {{ ressource.category.categoryAttributes[loop.index - 1].name }} :
+                            <b>
+                                {{ ra.value }}
+                            </b>
+                            {{ ressource.category.categoryAttributes[loop.index - 1].unity }}
+                        {% endfor %}
+                        ({{ ressource.description }})
+                        <div class="col-md-2 col-img-show">
+                            <img class="rounded float-left" src="/pictures/ressources/{{ ressource.ressourcePicture }}" alt="Card image cap">
+                        </div>
+                    </div>
+{#                    2EME COLONNE#}
+                    <div class="col-md-4">
+                        {#                DEBUT FORM#}
+                        {{ form_start(form) }}
+
+                        <div class="col-md-auto">
+                            {{ form_row(form.offerorneed) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(form.quantity) }}
+                        </div>
+                    </div>
+
+{#                    3EME COLONNE#}
+                    <div class="col-md-auto">
+                        <div class="col-md-auto">
+                            {{ form_row(form.location) }}
+                        </div>
+                        <div class="row">{{ form_row(form.proposal_picture) }}</div>
+                        <input type="submit" name="submit_button" value="BOUM" class="btn btn-dark" />
+
+                        {{ form_end(form) }}
+                        {#                FIN FORM#}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container mt-5">
+
+        </div>
+
+
+
+
+        {#        AFFICHAGE DU FORMULAIRE#}
+
+    {% endif %}
+
+    {#    Intégration de Jquery#}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            // évenement sur les boutons du choix des catégories pour afficher les catégories enfants
+            var id = document.getElementsByClassName("idCateg")
+            var boutons = document.getElementsByClassName("btn categ")
+
+            for (i = 0; i < boutons.length; i++){
+                console.log(i)
+                boutons[i].n = i
+                boutons[i].addEventListener("click", affiche)
+            }
+
+        })
+
+        // la boucle qui régénere l'évenement des boutons pour pouvoir continuer à choisir d'autres
+        function loop(){
+            $(document).ready(function(){
+                var id = document.getElementsByClassName("idCateg")
+                var boutons = document.getElementsByClassName("btn categ")
+
+                for (i = 0; i < boutons.length; i++){
+                    console.log(i)
+                    boutons[i].n = i
+                    boutons[i].addEventListener("click", affiche)
+                }
+
+            })
+        }
+
+        // l'évenement qui affiche le chemin des catégories selectionnées en cascade
+        function affiche(e) {
+            var id = e.target.getElementsByClassName("idCateg")[0].innerHTML
+            console.log(id)
+
+            // selector avec la div ou on veut loader lélément
+            $("#pathCategory").load("/category/pathCategory/" + id)
+
+            $("#choixCategory").load("/category/choiceCategory/" + id, loop)
+
+            $("#tableRessources").load("/proposal/tableRessources/"+ id)
+
+        }
+
+    </script>
+
+{% endblock %}

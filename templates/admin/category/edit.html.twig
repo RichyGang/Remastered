@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Fuse | éditer catégorie' %}
+
+{% block body %}
+    <div class="container mt-5">
+
+        <h1>Éditer la catégorie</h1>
+
+        <div class="container text-center">
+
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-4 mt-5">
+                    {{ form_row(form.mother) }}
+                </div>
+                <div class="col-4 mt-5">
+                    {{ form_row(form.name) }}
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-4"></div>
+                <div class="col-4 attributes">
+                    {{ form_row(form.categoryAttributes) }}
+                </div>
+                <div class="col-4">
+                    {#                    <input type="submit" name="submit_button" value="BOUM" class="btn btn-dark m-5" />#}
+                    <button class="type m-5"><symbol>&#10145;</symbol></button>
+                </div>
+            </div>
+            {{ form_end(form) }}
+
+{#            {{ form(formUnity) }}#}
+
+            {{ form_start(form2)}}
+
+            <div class="row">
+                <div class="col-4"></div>
+
+                <div class="col-4">
+                                        <button class="submit">&#10010;</button>
+                </div>
+                <div class="col-4"></div>
+            </div>
+
+            <div class="row">
+                <div class="col-4"></div>
+
+                <div class="col-4 mt-5">
+                    <div class="row mt-3">
+{#                        <div class="col-6">#}
+{#                            {{ form_row(form2.name) }}#}
+{#                        </div>#}
+{#                        <div class="col-6">#}
+{#                            {{ form_row(form2.unity) }}#}
+{#                        </div>#}
+{#                        <div class="col-6">#}
+{#                            {{ form_row(form2.format) }}#}
+{#                        </div>#}
+                    </div>
+                </div>
+                <div class="col-4"></div>
+            </div>
+            {{ form_end(form2) }}
+
+        </div>
+
+        <br>
+        <br>
+        <br>
+        Note : Mettre du JS pour afficher tous les attributs selectionnés à coté, au click
+
+        {% for ca in category.categoryAttributes.values %}
+                <div class="row attributes">
+                    <br>
+                    <div class="col-2">
+                        {{ ca.name }}
+                        {% if ( ca.unity != null ) %}
+                            [{{ ca.unity }}]
+                        {% endif %}
+                    </div>
+                </div>
+        {% endfor %}
+
+    </div>
+
+    <script>
+
+    </script>
+
+{% endblock %}

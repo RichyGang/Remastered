@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | catégories{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+
+        <h1>Gérer les catégories</h1>
+
+        {% for message in app.flashes('success') %}
+
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+        <br>
+
+
+        <div class="card-group justify-content-lg-center">
+            <div class="col-md-3 text-center">
+                <a href="{{ path('admin.category.new') }}" class="btn btn-primary">Nouvelle catégorie</a>
+            </div>
+        </div>
+
+        <br>
+
+        {% if categories %}
+
+            <div class="container mt-4">
+                <table class="table table-striped">
+                    <thead>
+                    {#            les entetes du tableau#}
+                    <tr>
+                        <th>Nom</th>
+                        <th>Mère</th>
+                        <th>Nombre de ressources</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {#            le corps du tableau#}
+
+                    {% for category in categories %}
+                        <tr>
+                            <td>
+                                {{ category.name }}
+                            </td>
+                            <td>
+                                {{ category.mother }}
+                            </td>
+                            <td>
+                                {{ category.ressources|length }}
+                            </td>
+                            <td>
+                                {% if category.ressources|length > 0 %}
+                                    <p>ressources en dépendent (à travailler)</p>
+                                {% endif %}
+                                <a href="{{ path('admin.category.edit', {id: category.id}) }}" class="btn btn-secondary">Éditer</a>
+                                {#                    pour permettre d'avoir un bouton delete qui mene vers la meme route que edit mais pour delete, display c'est pour que ca soit joli#}
+
+                                <a href="{{ path('admin.category.delete', {id: category.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ?')">Supprimer</a>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+{#            <table class="table table-striped">#}
+
+{#                <thead>#}
+{#                <tr>#}
+{#                    <th> Salut</th>#}
+{#                    <th> Bonjour</th>#}
+{#                    <th> Chichien</th>#}
+{#                </tr>#}
+{#                </thead>#}
+
+{#                <tbody>#}
+{#                #}{# le corps du tableau #}
+{#                {% for category in categories %}#}
+{#                    {% if category.mother == null %}#}
+{#                        <tr>#}
+{#                        <td>{{ category.name }}</td>#}
+{#                        {% for cat_child in categories %}#}
+{#                            {% if cat_child.mother == category%}#}
+{#                                <tr>#}
+{#                                    <td>{{ cat_child.name }}</td>#}
+{#                                </tr>#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+{#                        </tr>#}
+
+
+
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#            </table>#}
+
+            {#            <table class="table table-striped">#}
+            {#                <thead>#}
+            {#                <tr>#}
+            {#                    <th>Catégorie mère</th>#}
+            {#                    <th>Catégorie</th>#}
+            {#                    <th>Attributs</th>#}
+            {#                </tr>#}
+            {#                </thead>#}
+            {#                <tbody>#}
+            {#                #}{# le corps du tableau #}
+
+            {#                {% for category in categories %}#}
+            {#                    <tr>#}
+            {#                        <td>{{ category.mother }}</td>#}
+            {#                        <td>{{ category.name }}</td>#}
+            {#                        {% if category.categoryAttributes %}#}
+            {#                            {% for ca in category.categoryAttributes %}#}
+            {#                                <td>{{ ca.name }} {% if ca.unity %} [{{ ca.unity}}] {% endif %}</td>#}
+            {#                            {% endfor %}#}
+            {#                        {% endif %}#}
+            {#                        <td>#}
+            {#                            <a href="{{ path('category.new.attribute', {id: category.id}) }}" class="btn btn-secondary">Éditer</a>#}
+            {#                            #}{#                    pour permettre d'avoir un bouton delete qui mene vers la meme route que edit mais pour delete, display c'est pour que ca soit joli#}
+
+            {#                            <a href="{{ path('admin.ressources.delete', {id: category.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ?')">Supprimer</a>#}
+            {#                        </td>#}
+            {#                    </tr>#}
+            {#                {% endfor %}#}
+
+            {#                </tbody>#}
+            {#            </table>#}
+
+
+
+        {% endif %}
+
+        <br>
+
+        {% if categories is empty %}
+            <div class="text-center">
+                <p>Il n'y a pas de catégories pour l'instant :(</p>
+            </div>
+        {% endif %}
+
+        <br>
+
+        <div class="text-center">
+            <a href="/proposals/new" class="btn btn-secondary" >Nouvelle proposition</a>
+        </div>
+
+    </div>
+
+{% endblock %}

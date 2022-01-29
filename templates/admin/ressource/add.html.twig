@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | nouvelle ressource{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <form action="{{ path('ressource.add') }}">
+            <div class="form-group">
+                <label for="category_select">Catégorie</label>
+                <select class="form-control" id="category_select">
+                    {% for c in category %}
+                        <option value="{{ c.id }}" {% if category_ID == c.id %} selected {% endif %} >{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% if category_attr is not null %}
+                <div class="categoryAttributes">
+                    {% for a in category_attr %}
+                        <div class="form-group">
+                            <label for="{{ a.id }}">{{ a.name }}</label>
+                            <input type="text" class="form-control" id="{{ a.id }}" aria-describedby="attributHelp" placeholder="{{ a.unity }}">
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            <button type="submit" class="btn btn-primary" >Submit</button>
+        </form>
+
+        <div class="category">
+            <label for="">
+                Category
+            </label>
+            <br>
+            <select name="category" id="category_select">
+                {% for c in category %}
+                    <option value="{{ c.id }}" {% if category_ID == c.id %} selected {% endif %} >{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if category_attr is not null %}
+            <div class="categoryAttributes">
+                {% for a in category_attr %}
+                    <input type="text" placeholder="{{ a.name }}"  >
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="name">
+            <label for="">
+                Name
+                <input type="text" placeholder="name">
+            </label>
+        </div>
+        <button>Click me</button>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function insertParam(key, value) {
+            key = encodeURIComponent(key);
+            value = encodeURIComponent(value);
+
+            // kvp looks like ['key1=value1', 'key2=value2', ...]
+            var kvp = document.location.search.substr(1).split('&');
+            let i=0;
+
+            for(; i<kvp.length; i++){
+                if (kvp[i].startsWith(key + '=')) {
+                    let pair = kvp[i].split('=');
+                    pair[1] = value;
+                    kvp[i] = pair.join('=');
+                    break;
+                }
+            }
+
+            if(i >= kvp.length){
+                kvp[kvp.length] = [key,value].join('=');
+            }
+
+            // can return this or...
+            let params = kvp.join('&');
+
+            // reload page with new params
+            document.location.search = params;
+        }
+
+        let category_select = document.getElementById('category_select');
+
+        category_select.addEventListener('change', () => {
+            insertParam('categoryID', category_select.value)
+        })
+    </script>
+{% endblock %}

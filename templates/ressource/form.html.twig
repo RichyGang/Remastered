@@ -1,0 +1,42 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Fuse | nouvelle ressource{% endblock %}#}
+
+{% block body %}
+
+                {{ form_start(form_ress) }}
+
+                <br>
+                <br>
+
+                <div class="row flex">
+                    <p hidden>{{ form_row(form_ress.category) }}</p>
+{#                    <div class="col-md-4 text-center"></div>#}
+                    {% if category != null %}
+                        <div class="col-md-8 text-center">
+                            {% for categ_attr in category.categoryAttributes %}
+                                <div class="mt-3">
+                                    {{ form_row(attribute(form_ress, 'ressource_attribute' ~loop.index0 )) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-4 text-center mt-3">{{ form_row(form_ress.description) }}</div>
+                    {% endif %}
+                </div>
+                <br>
+                <br>
+    <div class="row text-center">
+        {% if category != null %}
+            <div class="row">{{ form_row(form_ress.ressource_picture) }}</div>
+        {% endif %}
+    </div>
+
+
+                <br>
+                <br>
+
+                <input type="submit" name="submit_button" value="BOUM" class="btn btn-dark" />
+
+                {{ form_end(form_ress) }}
+
+{% endblock %}

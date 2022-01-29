@@ -1,0 +1,49 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Fuse | propositions{% endblock %}#}
+
+{#{% block body %}#}
+
+<div class="row">
+    <div class="col-4">
+        <div class="category">
+            {% for category in categories %}
+                <div class="row mt-2">
+                    <button type="button" class="btn categ btn-outline-primary">{{ category }}<p class="idCateg" hidden>{{category.id }}</p></button>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{#    {% if category %}#}
+{#        <div class="col-4">#}
+{#            <div class="attributes">#}
+{#                {% for attribute in category.categoryAttributes %}#}
+{#                   <p hidden> {{ loop.index }}</p>#}
+{#                    <div class="input-group mb-3">#}
+{#                        <div class="input-group-prepend">#}
+{#                            <label class="input-group-text" for="inputGroupSelect01">{{ attribute.name }}</label>#}
+{#                        </div>#}
+{#                        <input type="text" name="city" list="cityname">#}
+{#                        <datalist id="{{ attribute.id }}">#}
+{#                            {% if categoryattributevaluestable %}#}
+{#                                {% for categoryattributevalues in categoryattributevaluestable[loop.index-1] %}#}
+{#                                    <option value="1">{{ categoryattributevalues.value }}</option>#}
+{#                                {% endfor %}#}
+{#                            {% endif %}#}
+{#                            <option value="Boston">#}
+{#                            <option value="Cambridge">#}
+{#                        </datalist>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endif %}#}
+
+    <div class="col-4 mt-5">
+
+    </div>
+
+</div>
+
+{#{% endblock %}#}

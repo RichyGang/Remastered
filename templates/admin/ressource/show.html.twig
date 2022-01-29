@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | {{ressource.id}} {% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    {# mt = marge in top = décalage par rapport à la nav bar #}
+    <div class="row">
+        <div class="col-md-8">
+            <img class="card-img-top" src="/pictures/ressources/{{ ressource.ressourcePicture }}" alt="Card image cap">
+        </div>
+        <div class="col-md-4">
+            {{ ressource.category.mother }} > {{ ressource.category }}
+
+            <br>
+            <br>
+            <br>
+
+            <div class="row">
+                <div class="col-md-auto">
+                    {# La ca va etre utile pour les proposals ou on va lister les différents attribus #}
+                    <table class="table table-striped">
+                        {% for ra in ressource.ressourceAttribute %}
+{#                            <div class="col-auto">#}
+{#                                #}
+{#                            </div>#}
+                        <tr>
+                            <td>
+                                {{ ressource.category.categoryAttributes[loop.index - 1].name }}
+                            </td>
+                            <td>
+                                {# (dans le cas d'une proposal) {{ proposal.attr1 }} #}
+                                {{ ra.value }}
+                            </td>
+                            <td>
+                                {{ ressource.category.categoryAttributes[loop.index - 1].unity }}
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        {% endblock %}

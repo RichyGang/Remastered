@@ -1,0 +1,33 @@
+{#            AFFICHAGE DES RESSOURCES DE CETTE CATÉGORIE#}
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Aperçu</th>
+        {% for ca in category.categoryAttributes %}
+            <th> {{ ca.name }} </th>
+        {% endfor %}
+        <th> x </th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {# le corps du tableau #}
+    <br>
+    {% if ressources != null %}
+        {% for ressource in ressources %}
+            <tr>
+                <td class="w-25">
+                    <img src="/pictures/ressources/{{ ressource.ressourcePicture }}" class="img-fluid img-thumbnail" alt={{ ressource.category.name }}>
+                </td>
+                {% for ra in ressource.ressourceAttributes %}
+                    <td> {{ ra }} </td>
+                {% endfor %}
+                <td>
+                    <a href="{{ path('proposal.new', {ressource_id: ressource.id}) }}" class="href">Choisir</a>
+                </td>
+            </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+
+</table>

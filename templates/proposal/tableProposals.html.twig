@@ -1,0 +1,137 @@
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Fuse | propositions{% endblock %}#}
+
+{#{% block body %}#}
+
+{% if category %}
+
+    <table class="table table-image">
+        <thead>
+        <tr>
+            <th scope="col">Aperçu</th>
+            <th scope="col">Action</th>
+            <th scope="col">Quantité</th>
+            {% if category.categoryAttributes.count != null %}
+                {% for ca in category.categoryAttributes %}
+                    <th scope="col"> {{ ca.name }} </th>
+                {% endfor %}
+            {% else %}
+                <th scope="col">Ressource</th>
+            {% endif %}
+            <th scope="col">Localisation</th>
+            <th scope="col">User</th>
+            <th scope="col">Completer</th>
+        </tr>
+        </thead>
+        <tbody>
+
+{#        {% if proposals == null %}#}
+{#            <div style="text-transform: lowercase;">0 offre/demande de {{ category.mother }} {{ category }}  pour l'instant</div>#}
+
+{#        {% endif %}#}
+
+        {% for proposal in proposals %}
+            <tr>
+
+                <td class="w-25">
+                    {#                                        <img class="card-img-top" src="/pictures/proposals/{{ proposal.proposalPicture }}" alt="Card image cap">#}
+                    <img src="/pictures/proposals/{{ proposal.proposalPicture }}" class="img-fluid img-thumbnail" alt="propositionImage">
+
+                </td>
+                <td>{% if proposal.offerorneed==1 %}offre {% else %} demande{% endif %}</td>
+                <td>{{ proposal.quantity }}</td>
+
+                {% if category.categoryAttributes.count != null %}
+                    {% for ra in proposal.ressource.ressourceAttributes %}
+                        <td> {{ ra.value }} </td>
+                    {% endfor %}
+
+                {% else %}
+                    <td>
+                        {% for ra in proposal.ressource.ressourceAttributes %}
+                            {{ ra }}
+                        {% endfor %}
+                    </td>
+                {% endif %}
+
+                {#                        <td>{{ proposal.unity }}</td>#}
+                <td>{{ proposal.location }}</td>
+                <td> {{ proposal.author.username }}</td>
+                <td>
+                    {% if proposal.offerorneed==1 %}
+                        <a href="{{ path('proposal.add', {id: proposal.id}) }}" class="btn btn-secondary">Demander</a>
+                    {% else %}
+                        <a href="{{ path('proposal.add', {id: proposal.id}) }}" class="btn btn-secondary">Offrir</a>
+                    {% endif %}
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% else %}
+
+    <table class="table table-image">
+        <thead>
+        <tr>
+            <th scope="col">Aperçu</th>
+            <th scope="col">Category</th>
+            <th scope="col">Ressource</th>
+            <th scope="col">Action</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Localisation</th>
+            <th scope="col">User</th>
+            <th scope="col">Completer</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+        {% if proposals == null %}
+            <div style="text-transform: lowercase;">0 offre/demande pour l'instant</div>
+        {% endif %}
+
+        {% for proposal in proposals %}
+            <tr>
+                <td class="w-25">
+                    {#                                        <img class="card-img-top" src="/pictures/proposals/{{ proposal.proposalPicture }}" alt="Card image cap">#}
+                    <img src="/pictures/proposals/{{ proposal.proposalPicture }}" class="img-fluid img-thumbnail" alt="propositionImage">
+                </td>
+                <td>{{ proposal.ressource.category.name }}</td>
+                <td>
+                    {% for ra in proposal.ressource.ressourceAttributes %}
+                        {{ ra }}
+                    {% endfor %}
+                </td>
+                <td>{% if proposal.offerorneed==1 %}offre {% else %} demande{% endif %}</td>
+                <td>{{ proposal.quantity }}</td>
+{#                {% if category.categoryAttributes.count != null %}#}
+{#                    {% for ra in proposal.ressource.ressourceAttributes %}#}
+{#                        <td> {{ ra.value }} </td>#}
+{#                    {% endfor %}#}
+
+{#                {% else %}#}
+
+{#                {% endif %}#}
+                {#                        <td>{{ proposal.unity }}</td>#}
+                <td>{{ proposal.location }}</td>
+                <td>{{ proposal.author.username }}</td>
+                <td>
+                    {% if proposal.offerorneed==1 %}
+                        <a href="{{ path('proposal.add', {id: proposal.id}) }}" class="btn btn-secondary">Demander</a>
+                    {% else %}
+                        <a href="{{ path('proposal.add', {id: proposal.id}) }}" class="btn btn-secondary">Offrir</a>
+                    {% endif %}
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+
+
+{#{% endblock %}#}

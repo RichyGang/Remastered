@@ -1,0 +1,251 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | propositions{% endblock %}
+
+{% block body %}
+
+    <div class="idCateg" hidden>{{proposal.ressource.category.id}}</div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Compléter la proposition</h3>
+                <div class="container mt-5" id="Ressource">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">{{ proposal.ressource.category }}</div>
+                        <img class="card-img-top" src="/pictures/proposals/{{ proposal.proposalPicture }}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title"></h5>
+                            <ul>
+                                {% for pra in proposal.ressource.ressourceAttributes %}
+                                <li> {{ proposal.ressource.category.categoryAttributes[loop.index - 1].name }}: <b>{{ pra.value }}</b> {{ proposal.ressource.category.categoryAttributes[loop.index - 1].unity }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mt-5">
+                {% if offerorneed == true %}<h5>Offrir</h5>{% else %} <h4>Demander</h4> {% endif %}
+
+                {{ form_start(form) }}
+                <input type="submit" name="submit_button" value="Ajouter" class="btn btn-dark" />
+                {{ form_end(form) }}
+
+{#                <form action="{{ path("proposal.add") }}" method="post">#}
+{#                    <div class="quantity">#}
+{#                        {% if proposal.quantity > 1 %}#}
+{#                            <label for="quantity">Quantité :</label>#}
+{#                            <input type="number" id="quantity" name="quantity" min="1" max="{{ proposal.quantity }}">#}
+{#                            ({{ proposal.quantity }} max)#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </form>#}
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+
+        </div>
+
+    </div>
+
+{#    Intégration de Jquery#}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+</script>
+
+<script>
+
+    // let quantity = document.getElementById('quantity');
+    //
+    // console.log(quantity.value);
+    //
+    // quantity.addEventListener('change', () => {
+    //     insertParam('quantity', quantity.value)
+    // })
+
+    // var id = document.getElementsByClassName("idCateg")[0].innerHTML
+    // console.log(id)
+    //
+    // $(document).ready(function() {
+    //     // selector avec la div ou on veut loader lélément
+    //     console.log(a)
+    //
+    //     $("#pathCategory").load("category/pathCategory/" + id)
+    // })
+
+</script>
+
+
+{% endblock %}
+
+{#    <div class="container mt-5">#}
+
+{#        {{ form_start(form) }}#}
+
+{#        {{ form_rest(form) }}#}
+
+{#        <input type="submit" name="submit_button" value="BOUM" class="btn btn-dark" />#}
+
+{#        {{ form_end(form) }}#}
+{#        <div class="row">#}
+{#            <div class="col-md-5">#}
+{#                <div class="proposalPicture">#}
+{#                    <img class="card-img-top" src="/pictures/{{ proposal.proposalPicture }}" alt="Card image cap">#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <div class="container">#}
+{#                    <div class="titleTypeProposal">#}
+{#                        {% if proposal.offerorneed == 1%}#}
+{#                            <h1>Demander</h1>#}
+{#                        {% else %}#}
+{#                            <h1>Offrir</h1>#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                    <div class="proposalAttribute">#}
+{#                        <p>Liste des attributs: </p>#}
+{#                        <ul>#}
+{#                            {% for pra in proposal.ressource.ressourceAttributes %}#}
+{#                                <li> {{ proposal.ressource.category.categoryAttributes[loop.index - 1].name }}: <b>{{ pra.value }}</b>  {{ proposal.ressource.category.categoryAttributes[loop.index - 1].unity }}</li>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    </div>#}
+{#                    <div class="localisation">#}
+{#                        <p id="demo"></p>#}
+{#                    </div>#}
+{#                    <div class="quantity">#}
+{#                        {% if proposal.quantity > 1 %}#}
+{#                            <label for="quantity">Quantité :</label>#}
+{#                            <input type="number" id="quantity" name="quantity" min="1" max="{{ proposal.quantity }}">#}
+{#                            ({{ proposal.quantity }} max)#}
+{#                        {% endif %}#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+{#    --------------------#}
+
+{#    <div class="container mt-4">#}
+{#        <h1>#}
+{#            {% if proposal.needOrAsk == 1%}#}
+{#                Demander#}
+{#            {% else %}#}
+{#                Offrir#}
+{#            {% endif %}#}
+{#        </h1>#}
+{#        à {{ proposal.user.username }}#}
+{#        <br>#}
+
+
+{#        {% for pra in proposal.ressource.ressourceAttribute %}#}
+{#            <tr>#}
+{#                <td>#}
+{#                    {{ proposal.ressource.category.categoryAttributes[loop.index - 1].name }}#}
+{#                </td>#}
+{#                <td>#}
+{#                    <b>{{ pra.value }}</b>#}
+{#                </td>#}
+{#                <td>#}
+{#                    {{ proposal.ressource.category.categoryAttributes[loop.index - 1].unity }}#}
+{#                </td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+
+{#        <div class="container mt-4">#}
+
+{#        </div>#}
+
+{#        <form action="{{ path('proposals.add', {'id': proposal.id}) }}">#}
+
+{#            début shit de position GPS#}
+
+{#            <p>Localisation</p>#}
+
+{#            <button onclick="getLocation()">Position actuelle</button>#}
+
+{#            <p id="demo"></p>#}
+
+{#            <script>#}
+{#                var x = document.getElementById("demo");#}
+
+{#                function getLocation() {#}
+{#                    if (navigator.geolocation) {#}
+{#                        navigator.geolocation.getCurrentPosition(showPosition);#}
+{#                    } else {#}
+{#                        x.innerHTML = "Geolocation is not supported by this browser.";#}
+{#                    }#}
+{#                }#}
+
+{#                function showPosition(position) {#}
+{#                    x.innerHTML = "Latitude: " + position.coords.latitude +#}
+{#                        "<br>Longitude: " + position.coords.longitude;#}
+{#                }#}
+{#            </script>#}
+
+{#            fin shit de position GPS#}
+
+{#            ou : {{ form_row(form.location) }}#}
+
+
+
+{#            #}{#        Si la proposition sur laquelle on clic est une demande alors on va offrir, donc il y a des photos à ajouter, sinon non#}
+{#            {% if proposal.needOrAsk == 0%}#}
+
+{#                {{ form_row(form.proposal_picture) }}#}
+
+{#            {% endif %}#}
+
+{#            <input type="submit" name="submit_button" value="BOUM" class="btn btn-dark" />#}
+{#        </form>#}
+
+
+
+
+{#                {{ form_start(form) }}#}
+
+
+{#        {{ form_widget(form._token) }}#}
+{#        {{ form_end(form, {'render_rest': false}) }}#}
+
+{#        #}{#        <br>#}
+{#        #}{#        <br>#}
+{#        #}{#        {{ form_row(form.category) }}#}
+{#        #}{#        {% if form.category != null %}#}
+{#        #}{#            {% for ra in ressource.ressourceAttribute %}#}
+{#        #}{#                {{ ra.value }} {{ ressource.category.categoryAttributes[loop.index - 1].unity }}#}
+{#        #}{#                #}{##}{#                            {{ form_row(ressource.category.categoryAttributes[loop.index - 1].unity) }}#}
+{#        #}{#            {% endfor %}#}
+{#        #}{#        {% endif %}#}
+
+{#        #}{#        <div class="row">#}
+
+{#        #}{#            #}{##}{#            <div class="col-md-4 text-center">{{ form_row(form.parent) }}</div>#}
+{#        #}{#            #}{##}{#            <div class="col-md-4 text-center">{{ form_row(form.name) }}</div>#}
+{#        #}{#            #}{##}{#            <div class="col-md-4 text-center">{{ form_row(form.description) }}</div>#}
+{#        #}{#        </div>#}
+
+{#        #}{#        <button class="btn-primary mt-4">Boudoum</button>#}
+
+{#                {{ form_end(form) }}#}
+{#        #}{#        {{ form(form) }}#}
+{#        #}{#        {% include 'admin/_form.html.twig' with {'foo': 'bar'} %}#}
+
+{#        #}{#        {% set vars = {'foo': 'bar'} %}#}
+{#        #}{#        {% include 'admin/_form.html.twig' with vars %}#}
+
+
+{#        #}{#        {% include 'admin/ressources/_form.html.twig'%} {{form: form, button: 'Éditer'}}#}
+{#    </div>#}
+

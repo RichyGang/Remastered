@@ -1,0 +1,228 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | catégories{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-5">
+
+        <h1>Gérer les offres et demandes</h1>
+
+        {% for message in app.flashes('success') %}
+
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+        <br>
+
+        <br>
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-2">
+
+                </div>
+
+                <div class="col-2">
+                    <ul id="myUL">
+                        {% for cm in categorymother %}
+                            {#                                on met .values car ca fait getChildren->getValues pour avoir les entités enfants#}
+                            {% if cm.children.values != null %}
+                                <li>
+                        <span class="caret">
+                            <a href="{{ path('admin.proposal', {categId: cm.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cm }}</a>
+                        </span>
+                                    <ul class="nested">
+                                        {% for cmc in cm.children %}
+                                            {% if cmc.children.values != null %}
+                                                <li>
+                                        <span class="caret">
+                                            <a href="{{ path('admin.proposal', {categId: cmc.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cmc }}</a>
+                                        </span>
+                                                    <ul class="nested">
+                                                        {% for cmcc in cmc.children %}
+                                                            {% if cmcc.children.values != null %}
+                                                                <li>
+                                                        <span class="caret">
+                                                            <a href="{{ path('admin.proposal', {categId: cmcc.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cmcc }}</a>
+                                                        </span>
+                                                                </li>
+                                                            {% else %}
+                                                                <li>
+                                                                    <a href="{{ path('admin.proposal', {categId: cmcc.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cmcc }}</a>
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <a href="{{ path('admin.proposal', {categId: cmc.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cmc }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <a href="{{ path('admin.proposal', {categId: cm.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cm }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-4">
+                    {% if category != null %}
+                        {% for attribute in category.categoryAttributes %}
+                            <div class="row-cols-3 mt-2">
+                                <input type="text" placeholder={{ attribute }}>
+                                {% if attribute.unity != null %}
+                                    [{{ attribute.unity }}]
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-4">
+
+                    <div id="map"></div>
+
+                    <!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+                    <script
+                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYvGAxdpJHK9NCaKij6-pXzk6su2bbUPY&callback=initMap&libraries=&v=weekly"
+                            async
+                    ></script>
+
+                </div>
+
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="submit" class="btn"><symbol>&#10145;</symbol></button>
+            </div>
+
+        </div>
+
+        {% if proposals %}
+
+            {# le corps du tableau #}
+
+            {#                À REVOIR IL Y A DE LA REDONDANCES EN DESSOUS LA#}
+            {% if category %}
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Quantité</th>
+                        {% for ca in category.categoryAttributes %}
+                            <th scope="col"> {{ ca.name }} </th>
+                        {% endfor %}
+                        <th scope="col">Localisation</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for proposal in proposals %}
+                        {% if proposal.ressource.category == category %}
+                            <tr>
+                                {#                                    <td>{{ proposal.user.username }}</td>#}
+                                <td class="w-25">
+                                    <img src="/pictures/proposals/{{ proposal.proposalPicture }}" class="img-fluid img-thumbnail" alt={{ proposal.ressource.category.name }}>
+                                </td>
+                                <td>{% if proposal.needorask==1 %}offre {% else %} demande{% endif %}</td>
+                                <td>{{ proposal.quantity }}</td>
+                                {% for ra in proposal.ressource.ressourceAttribute %}
+                                    <td> {{ ra }} </td>
+                                {% endfor %}
+                                {#                        <td>{{ proposal.unity }}</td>#}
+                                <td>{{ proposal.location }}</td>
+                                <td>
+                                    <a href="{{ path('admin.proposal.edit', {id: proposal.id}) }}" class="btn btn-secondary">Éditer</a>
+                                    {#                    pour permettre d'avoir un bouton delete qui mene vers la meme route que edit mais pour delete, display c'est pour que ca soit joli#}
+
+                                    <a href="{{ path('admin.proposal.delete', {id: proposal.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ?')">Supprimer</a>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+
+                <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Apercu</th>
+                    <th>Auteur</th>
+                    <th>Action</th>
+                    <th>Quantité</th>
+                    <th>Ressource</th>
+                    <th>Localisation</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for proposal in proposals %}
+                    <tr>
+                        <td class="w-25">
+                            <img src="/pictures/proposals/{{ proposal.proposalPicture }}" class="img-fluid img-thumbnail" alt={{ proposal.ressource.category.name }}>
+                        </td>
+                        <td>{{ proposal.author.username }}</td>
+                        <td>{% if proposal.offerorneed==1 %}offre {% else %} demande{% endif %}</td>
+                        <td>{{ proposal.quantity }}</td>
+                        <td>
+                            {% for ra in proposal.ressource.ressourceAttributes %}
+                                {{ ra.value }}
+                            {% endfor %}
+                        </td>
+                        {#                        <td>{{ proposal.unity }}</td>#}
+                        <td>{{ proposal.location }}</td>
+                        <td>
+                            <a href="{{ path('admin.proposal.edit', {id: proposal.id}) }}" class="btn btn-secondary">Éditer</a>
+                            {#                    pour permettre d'avoir un bouton delete qui mene vers la meme route que edit mais pour delete, display c'est pour que ca soit joli#}
+
+                            <a href="{{ path('admin.proposal.delete', {id: proposal.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sur de vouloir supprimer ?')">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+            </table>
+        {% endif %}
+
+        <br>
+
+        {% if proposals is empty %}
+            <div class="text-center">
+                <p>Il y a ni offre ni demande pour l'instant :(</p>
+            </div>
+        {% endif %}
+
+        <br>
+
+    </div>
+
+    <script>
+
+        // Évenement qui permet de développer le tree des catégories
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function() {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                console.log(this.parentElement)
+                // this.parentElement.innerText = "Bang Bang"
+                this.classList.toggle("caret-down");
+            });
+        }
+
+    </script>
+
+{% endblock %}

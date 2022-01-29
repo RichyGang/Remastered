@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matchs{% endblock %}
+
+{% block body %}
+
+    {% if user != null %}
+
+        <div id="confirmed" class="container mt-5"></div>
+
+
+        <div class="container mt-5">
+            <h3>Matchs en attentes</h3>
+
+            <table class="table table-striped" id="tableProposals">
+                <thead>
+                <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Ressource</th>
+                    <th scope="col">Propositions</th>
+                    <th scope="col">User</th>
+                    <th colspan="2" scope="col">Réponse</th>
+                </tr>
+                </thead>
+                <tbody>
+                {# un Match = [user -> proposal -> ressource ->..] #}
+                <script> var i = 0 </script>
+                {% set i = 0 %}
+
+                {% for match in matchs %}
+                    <tr>
+                        <td rowspan="2">{{ user.userName }}</td>
+                        {# La ressource #}
+                        <td>
+                            &#8594; {{ match[2].category.name }} :
+                            {% for ra in match[2].ressourceAttributes %}
+                                {{ ra.value }}
+                            {% endfor %}
+                        </td>
+                        {# la proposition #}
+                        <td> Quantité : {{ match[1].quantity }}<br> Localisation : {{ match[1].location }}</td>
+                        <td> &#8594; {{ match[4].username }}</td>
+
+                    </tr>
+                    <tr>
+                        <td width="33%">
+                            &#8592; {{ match[match|length-3].category.name }} :
+                            {% for ra in match[match|length-3].ressourceAttributes %}
+                                {{ ra.value }}
+                            {% endfor %}
+                        </td>
+                        <td>Quantité : {{ match[match|length-2].quantity }} <br> Localisation
+                            : {{ match[match|length-2].location }}</td>
+                        <td>&#8592;{{ match[match|length-1].username }}</td>
+
+                        <div class="answer">
+                            <td id={{ i }}>
+                                {# POUR ENREGISTRER LA REPONSE DU MATCH AVEC LES PARAMETRES REQUIS #}
+                                <iframe name="votar" style="display:none;"></iframe>
+                                <form action="http://localhost:3000/matchs" method="post" target="votar"
+                                      onsubmit="afficheAccept({{ i }})">
+                                    <input type="hidden" id="userId" name="userId" value={{ user.username }} size="1">
+                                    <input type="hidden" id="ans" name="ans" value='1' size="1">
+                                    <input type="hidden" id="propId1" name="propId1" value={{ match[1].id }} size="1">
+                                    <input type="hidden" id="propId2" name="propId2"
+                                           value={{ match[match|length-2].id }} size="1">
+                                    <input type="submit" value="Accepter" class="btn btn-outline-primary">
+                                </form>
+                                <br>
+                                <form action="http://localhost:3000/matchs" method="post" target="votar"
+                                      onsubmit="afficheDecline({{ i }})">
+                                    <input type="hidden" id="userId" name="userId" value={{ user.username }} size="1">
+                                    <input type="hidden" id="ans" name="ans" value='1' size="1">
+                                    <input type="hidden" id="propId1" name="propId1" value={{ match[1].id }} size="1">
+                                    <input type="hidden" id="propId2" name="propId2"
+                                           value={{ match[match|length-2].id }} size="1">
+                                    <input type="submit" value="Décliner" class="btn btn-outline-secondary">
+                                </form>
+                            </td>
+                        </div>
+                    </tr>
+
+                    {% set i = i + 1 %}
+
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+            <div class="container mt-5">
+                <h3>Matchs en détails</h3>
+                {% for match in matchs %}
+                    {% for e in match %}
+                        {% if loop.index == 1 %}
+                            {{ e.username }}
+                        {% elseif loop.index %2 != 1 %}
+                            -> {{ e.quantity }} {{ e.location }} ->
+                        {% elseif loop.index %2 == 1 and loop.index %4 != 1 %}
+                            {% for ra in e.ressourceAttributes %}
+                                {{ ra.value }}
+                            {% endfor %}
+                            {{ e.category.name }}
+                        {% elseif loop.index %4 == 1 %}
+                            {{ e.username }}
+                        {% endif %}
+                    {% endfor %}
+                    <br>
+                {% endfor %}
+            </div>
+
+        </div>
+    {% endif %}
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+    </script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#confirmed").load("match/confirmed")
+
+        })
+
+        function afficheAccept(i) {
+            $(document).ready(function () {
+                var answer = document.getElementById(i)
+
+                console.log(answer)
+                answer.innerHTML = "Accepté"
+            })
+        }
+
+        function afficheDecline(i) {
+            $(document).ready(function () {
+                // var answers = document.getElementsByClassName("answer")
+                var answer = document.getElementById(i)
+
+                console.log(answer)
+                answer.innerHTML = "Décliné"
+            })
+        }
+
+    </script>
+
+{% endblock %}

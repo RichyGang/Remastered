@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | nouvelle catégorie{% endblock %}
+
+{% block body %}
+
+    {% for category in categories %}
+        <div class="categories"><p hidden>{{ category.name }}</p></div>
+    {% endfor %}
+
+    <div class="container mt-5 ">
+        <h1>Nouvelle categorie</h1>
+
+        <ul id="myUL">
+            {% for cm in categorymothers %}
+                {#                                on met .values car ca fait getChildren->getValues pour avoir les entités enfants#}
+                {% if cm.children.values != null %}
+                    <li>
+                        <span class="caret">
+                            <a href="{{ path('proposal', {categId: cm.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cm }}</a>
+                        </span>
+                        <ul class="nested">
+                            {% for cmc in cm.children %}
+                                {% if cmc.children.values != null %}
+                                    <li>
+                                        <span class="caret">
+                                            <a href="{{ path('proposal', {categId: cmc.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cmc }}</a>
+                                        </span>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a href="{{ path('proposal', {categId: cmc.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cmc }}</a>
+                                    </li>
+
+                                {% endif %}
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                {% else %}
+                    <a href="{{ path('proposal', {categId: cm.id}) }}" class="btn btn-outline-secondary btn-sm mt-2">{{ cm }}</a>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        {{ form_start(form_cat) }}
+
+        <br>
+        <br>
+
+        <div class="row flex">
+            <div class="col-md text-center">{{ form_row(form_cat.mother) }}</div>
+            <div class="col-md text-center">{{ form_row(form_cat.name) }}</div>
+        </div>
+
+        <br>
+        <br>
+
+        <input type="submit" name="new_category_button" value="BOUM" class="btn btn-dark" />
+
+        <br>
+
+        {{ form_end(form_cat) }}
+
+        <br>
+
+        <br>
+        <br>
+
+    </div>
+
+    <script>
+        // Évenement qui permet de développer le tree des catégories
+        var a = document.getElementById("myUL")
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        console.log(a)
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", deploy);
+        }
+
+        function deploy(e) {
+            this.parentElement.querySelector(".nested").classList.toggle("active");
+            console.log(this.innerText)
+            console.log(a.innerHTML)
+
+            this.classList.toggle("caret-down");
+        }
+
+    </script>
+
+{% endblock %}

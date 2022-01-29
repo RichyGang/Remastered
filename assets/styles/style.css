@@ -1,0 +1,153 @@
+body{
+    background-color: #ebebeb;
+}
+
+
+.btn-login-page {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.badge-admin {
+    background-color: teal;
+    margin-top: 10px;
+}
+
+.content-admin-dashboard {
+    margin-top: 30px;
+}
+
+.block-list-item {
+}
+
+.item {
+    border-top: solid 1px #d9d9d9;
+}
+
+.col-img img {
+    width: 100%;
+    height: auto;
+    border-radius: 1.67%;
+    margin: 20px;
+}
+
+.col-img-show img {
+    width: 500%;
+    height: auto;
+    border-radius: 1.67%;
+    /*padding: 20px;*/
+    /*margin: 20px;*/
+    margin-top: 20px;
+}
+
+/*:hover {*/
+/*    background-color: #ebebeb;*/
+/*}*/
+
+.pagetitle {border-bottom:1px solid #cccccc; padding-bottom:20px; margin-bottom:20px; margin-top: 20px}
+
+
+/*Tests pour sort la table*/
+
+table {
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #dddddd;
+}
+
+th {
+    cursor: pointer;
+}
+
+th, td {
+    text-align: left;
+    padding: 16px;
+}
+
+/*tr:nth-child(even) {*/
+/*    background-color: #833f3f*/
+/*}*/
+
+/*Les styles pour le tree des catégories dans onglet propositions*/
+
+/* Remove default bullets */
+ul, #myUL {
+    list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+    font-family:arial;
+
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+    content: "\25B6";
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+    font-family:arial;
+
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+    transform: rotate(90deg);
+    font-family:arial;
+
+}
+
+/* Hide the nested list */
+.nested {
+    display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+    display: block;
+}
+
+/*Le cadre pour dessiner avec la souris*/
+canvas {
+    border: 1px solid black;
+    width: 560px;
+    height: 360px;
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+    content: "\25B6";
+    font-family: arial;
+    color: black;
+    display: inline-block;
+    margin-right: 6px;
+}
+
+/*Google map*/
+
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+/* Set the size of the div element that contains the map */
+#map {
+    height: 300px;
+    /* The height is 400 pixels */
+    width: 100%;
+    /* The width is the width of the web page */
+}
+
+symbol {
+    color: black;
+    font-family:arial;
+    font-size:100px;
+    transform: scale(.2, 1);
+}
+

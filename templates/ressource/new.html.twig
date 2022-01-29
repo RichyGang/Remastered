@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fuse | nouvelle ressource{% endblock %}
+
+{% block body %}
+
+    {% if category %}
+        <p class="category" hidden>{{category.id }}</p>
+    {% endif %}
+
+    <div class="container mt-4 text-center">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4"><h2>Nouvelle ressource</h2></div>
+        <div class="col-4"></div>
+    </div>
+
+    <div id="pathCategory"></div>
+
+    <div class="row">
+        <div class="col-4">
+            <div id="choixCategory" class="container mt-2">
+                <div class="category">
+                    {% for c in categorymother %}
+                        <div class="row mt-2">
+                            <button type="button" class="btn categ btn-outline-primary">{{ c }}<p class="idCateg" hidden>{{c.id }}</p></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-6 mt-3">
+            <div id="formRessource">
+            </div>
+        </div>
+    </div>
+{#                <div id="formRessource"></div>#}
+
+{#            {{ form_start(form_ress) }}#}
+
+{#            <br>#}
+{#            <br>#}
+
+{#            <div class="row flex">#}
+{#                <div class="col-md-4 text-center">{{ form_row(form_ress.category) }}</div>#}
+{#                {% if category != null %}#}
+{#                    <div class="col-md-4 text-center">#}
+{#                        {% for categ_attr in category.categoryAttributes %}#}
+{#                            {{ dump("UO") }}#}
+
+{#                            {{ form_row(attribute(form_ress, 'ressource_attribute' ~loop.index0 )) }}#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{#                    <div class="col-md-4 text-center">{{ form_row(form_ress.description) }}</div>#}
+{#                {% endif %}#}
+{#            </div>#}
+{#            <br>#}
+{#            <br>#}
+{#            {% if category != null %}#}
+{#                <div class="row">{{ form_row(form_ress.ressource_picture) }}</div>#}
+{#            {% endif %}#}
+
+{#            <br>#}
+{#            <br>#}
+
+{#            <input type="submit" name="submit_button" value="BOUM" class="btn btn-dark" />#}
+
+
+{#            {{ form_end(form_ress) }}#}
+
+
+{#------#}
+
+
+{#            {% if category %}#}
+{#                <div class="col-4">#}
+{#                    <div class="attributes">#}
+{#                        {% for attribute in category.categoryAttributes %}#}
+{#                            <div class="form-group">#}
+{#                                <div class="input-group-prepend">#}
+{#                                    <label class="form-control" for="inputGroupSelect01">{{ attribute.name }}</label>#}
+{#                                </div>#}
+{#                                <select class="custom-select" id="{{ attribute.id }}">#}
+{#                                    <option selected></option>#}
+{#                                    <option value="1">One</option>#}
+{#                                    <option value="2">Two</option>#}
+{#                                    <option value="3">Three</option>#}
+{#                                </select>#}
+{#                            </div>#}
+{#                        {% endfor %}#}
+{#                        <div class="input-group input-group-sm mb-3">#}
+{#                            <div class="input-group-prepend">#}
+{#                                <span class="input-group-text" id="inputGroup-sizing-sm">Nom</span>#}
+{#                            </div>#}
+{#                            <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endif %}#}
+
+
+    {#----------------------------------------------------JAVASCRIPT-----------------------------------------------------------#}
+
+        {#    Intégration de Jquery#}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+                crossorigin="anonymous">
+        </script>
+
+    <script>
+
+        $(document).ready(function (){
+            // évenement sur les boutons du choix des catégories pour afficher les catégories enfants
+            // var id = document.getElementsByClassName("idCateg")
+            var id = document.getElementsByClassName("idCateg")[0].innerHTML
+            if (id){
+                console.log(id)
+            }
+
+            var boutons = document.getElementsByClassName("btn categ")
+
+            for (i = 0; i < boutons.length; i++){
+                console.log(i)
+                boutons[i].n = i
+                boutons[i].addEventListener("click", affiche)
+            }
+        })
+
+        function loop(){
+            $(document).ready(function(){
+                var id = document.getElementsByClassName("idCateg")
+                var boutons = document.getElementsByClassName("btn categ")
+
+                for (i = 0; i < boutons.length; i++){
+                    console.log(i)
+                    boutons[i].n = i
+                    boutons[i].addEventListener("click", affiche)
+                }
+
+            })
+        }
+
+        var id = document.getElementsByClassName("category")[0].innerHTML
+
+        if (id!=null){
+
+            $("#pathCategory").load("/category/pathCategory/" + id)
+
+            $("#choixCategory").load("/category/choiceCategory/" + id, loop)
+
+            $("#formRessource").load("/ressource/form/" + id, loop)
+
+        }
+
+        // l'évenement qui affiche le chemin des catégories selectionnées en cascade
+        function affiche(e) {
+
+            var id = e.target.getElementsByClassName("idCateg")[0].innerHTML
+
+            // POUR RAJOUTER LE PARAMETRE ID DANS L'URL SANS RECHARGER
+            var url = '/ressource/new';
+            url += ['/'+ id]
+            window.history.replaceState(null, null, url);
+
+            // selector avec la div ou on veut loader lélément
+            $("#pathCategory").load("/category/pathCategory/" + id)
+
+            $("#choixCategory").load("/category/choiceCategory/" + id, loop)
+
+            $("#formRessource").load("/ressource/form/" + id, loop)
+
+        }
+
+    </script>
+
+{% endblock %}
