@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "441044b74901c24f346cfe747e3b0df5",
+    "content-hash": "912c1214ede75912b1f2ebb98ae3ccef",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -7882,16 +7882,16 @@
         },
         {
             "name": "symfony/uid",
-            "version": "v5.3.10",
+            "version": "v5.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/uid.git",
-                "reference": "183336998e6b28c37ebf04ee18e6359dfb22084d"
+                "reference": "8aa88ed0c5002ade841d2c91b616824b14d0ab7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/uid/zipball/183336998e6b28c37ebf04ee18e6359dfb22084d",
-                "reference": "183336998e6b28c37ebf04ee18e6359dfb22084d",
+                "url": "https://api.github.com/repos/symfony/uid/zipball/8aa88ed0c5002ade841d2c91b616824b14d0ab7d",
+                "reference": "8aa88ed0c5002ade841d2c91b616824b14d0ab7d",
                 "shasum": ""
             },
             "require": {
@@ -7932,10 +7932,11 @@
             "homepage": "https://symfony.com",
             "keywords": [
                 "UID",
+                "ulid",
                 "uuid"
             ],
             "support": {
-                "source": "https://github.com/symfony/uid/tree/v5.3.10"
+                "source": "https://github.com/symfony/uid/tree/v5.3.14"
             },
             "funding": [
                 {
@@ -7951,7 +7952,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-15T16:00:52+00:00"
+            "time": "2022-01-02T09:51:59+00:00"
         },
         {
             "name": "symfony/validator",
@@ -11053,7 +11054,8 @@
     "platform": {
         "php": "^7.2||^8.0",
         "ext-ctype": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

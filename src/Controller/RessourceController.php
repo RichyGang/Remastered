@@ -214,7 +214,7 @@ class RessourceController extends AbstractController
                 // FIN AJOUT
 
                 $this->addFlash('success', 'Ressource bien ajoutée!' );
-//                return $this->redirectToRoute('ressource.index');
+                return $this->redirectToRoute('ressource.index');
             }
         }
 

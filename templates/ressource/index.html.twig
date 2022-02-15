@@ -37,39 +37,34 @@
         <br>
         <br>
 
-        <div class="row flex">
-            {% for ressource in ressources %}
-                <div class="col-3">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-header">
-                            {{ ressource.category }}
-                        </div>
-{#                        {{ dump(ressource.ressourcePicture) }}#}
-                        <img src="/pictures/ressources/{{ ressource.ressourcePicture }}" class="img-fluid img-thumbnail" alt="ressourceImage">
+        <div class="container m-lg-1">
+            <div class="row flex">
+                {% for ressource in ressources %}
+                    <div class="col-3">
+                        <div class="container mt-5" id="Ressource">
+                            <div class="card" style="width: 18rem;">
+                                <div class="card-header">{{ ressource.category }}</div>
+                                <img class="card-img-top" src="/pictures/ressources/{{ ressource.ressourcePicture }}" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title"></h5>
+                                    <ul style="list-style-type:none;">
+                                        {% for ra in ressource.ressourceAttributes %}
+                                            <li> {{ ressource.category.categoryAttributes[loop.index - 1].name }}: <b>{{ ra.value }}</b>
+                                                {% if ressource.category.categoryAttributes[loop.index - 1].unity %}
+                                                    {{ ressource.category.categoryAttributes[loop.index - 1].unity.symbol }}
+                                                {% endif %}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    <a href="{{ path('proposal.new', {ressId: ressource.id}) }}" class="btn btn-primary">Offrir/Demander</a>
 
-{#                        <img class="card-img-top" src="/pictures/ressource/{{ ressource.ressourcePicture }}" alt="Card image cap">#}
-                        <div class="card-body">
-                            <div class="card-title">
-                                <h5>
-                                    {% for ra in ressource.ressourceAttributes %}
-                                        {{ ra.value }}
-                                        {% if ressource.category.categoryAttributes[loop.index - 1].unity != null%}
-                                            {{ ressource.category.categoryAttributes[loop.index - 1].unity.symbol }}
-                                        {% endif %}
-                                    {% endfor %}
-                                </h5>
-
+                                </div>
                             </div>
-                            <p class="card-text">{{ ressource.description }}</p>
-
-{#                            <a href="{{ path('proposal.new', {ressource_id: ressource.id}) }}" class="href">Choisir</a>#}
-                            <a href="{{ path('proposal.new', {ressId: ressource.id}) }}" class="btn btn-primary">Offrir/Demander</a>
-{#                            <a href="#" class="btn btn-primary">Offrir</a>#}
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
+
 
     </div>
 {% endblock %}

@@ -32,8 +32,17 @@ class UserFixtures extends Fixture
             'shelby'
         ));
 
+        $user2 = new User;
+        $user2->setUsername('Arthur');
+        $user2->setPassword($this->passwordEncoder->encodePassword(
+            $user2,
+            'shelby'
+        ));
+
         $manager->persist($user);
         $manager->persist($user1);
+        $manager->persist($user2);
+
 
         $manager->flush();
     }

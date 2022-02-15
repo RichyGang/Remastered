@@ -30,6 +30,8 @@
 
                 {{ form_start(form) }}
                 <input type="submit" name="submit_button" value="Ajouter" class="btn btn-dark" />
+                <div class="row">{{ form_row(form.proposal_picture) }}</div>
+
                 {{ form_end(form) }}
 
 {#                <form action="{{ path("proposal.add") }}" method="post">#}

@@ -77,6 +77,11 @@ class Proposal
      */
     private $proposal_picture;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=MatchEntity::class, mappedBy="proposal_in")
+     */
+    private $matchs;
+
     public function __construct()
     {
         $this->askers = new ArrayCollection();
@@ -85,6 +90,7 @@ class Proposal
         $this->start=new \DateTime();
         $this->deadline = new \DateTime();
         $this->proposals_linked = new ArrayCollection();
+        $this->matchs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,6 +238,33 @@ class Proposal
     public function setProposalPicture(?string $proposal_picture): self
     {
         $this->proposal_picture = $proposal_picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MatchEntity[]
+     */
+    public function getMatchs(): Collection
+    {
+        return $this->matchs;
+    }
+
+    public function addMatch(MatchEntity $match): self
+    {
+        if (!$this->matchs->contains($match)) {
+            $this->matchs[] = $match;
+            $match->addProposalIn($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(MatchEntity $match): self
+    {
+        if ($this->matchs->removeElement($match)) {
+            $match->removeProposalIn($this);
+        }
 
         return $this;
     }

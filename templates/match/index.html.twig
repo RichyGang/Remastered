@@ -6,12 +6,170 @@
 
     {% if user != null %}
 
-        <div id="confirmed" class="container mt-5"></div>
+        {% if matchs_completed %}
+            <div class="container mt-5">
+
+                <h3>Matchs complétés</h3>
+
+                <table class="table table-striped" id="tableProposals">
+                    <thead>
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Ressource</th>
+                        <th scope="col">Propositions</th>
+                        <th scope="col">User</th>
+{#                        <th colspan="2" scope="col">Réponse</th>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# un Match = [user -> proposal -> ressource ->..] #}
+                    <script> var i = 0 </script>
+                    {% set i = 0 %}
+
+                    {% for match in matchs_completed %}
+                        <tr>
+                            {#                                {{ dump(match) }}#}
+                            <td rowspan="2">{{ user.userName }}</td>
+                            {# La ressource #}
+                            <td>
+                                &#8594; {{ match.ressourcein.category.name }} :
+                                {% for ra in match.ressourceout.ressourceAttributes %}
+                                    {{ ra.value }}
+                                {% endfor %}
+                            </td>
+                            {# la proposition #}
+                            <td> Quantité : {{ match.proposaloutR.quantity }}<br> Localisation : {{ match.proposaloutR.location }}</td>
+                            <td> &#8594; {{ match.proposaloutR.author.username }}</td>
+
+                        </tr>
+                        <tr>
+                            <td width="33%">
+                                &#8592; {{ match.ressourcein.category.name }} :
+                                {% for ra in match.ressourcein.ressourceAttributes %}
+                                    {{ ra.value }}
+                                {% endfor %}
+                            </td>
+                            <td>Quantité : {{ match.proposalinP.quantity }} <br> Localisation
+                                : {{ match.proposalinP.location }}</td>
+                            <td>&#8592;{{ match.proposalinP.author.username }}</td>
+
+                            <div class="answer">
+{#                                <td id={{ i }}>#}
+                                    {#                                 POUR ENREGISTRER LA REPONSE DU MATCH AVEC LES PARAMETRES REQUIS#}
+{#                                    <iframe name="votar" style="display:none;"></iframe>#}
+{#                                    <form action="http://localhost:8000/match" method="post"#}
+{#                                          onsubmit="afficheAccept({{ i }})">#}
+{#                                        <input type="hidden" id="ans" name="ans" value='1' size="1">#}
+{#                                        <input type="hidden" id="mid" name="mid" value={{ match.mid }} size="1">#}
+{#                                        <input type="submit" value="Accepter" class="btn btn-outline-primary">#}
+{#                                    </form>#}
+{#                                    <br>#}
+{#                                    <form action="http://localhost:8000/match" method="post"#}
+{#                                          onsubmit="afficheDecline({{ i }})">#}
+{#                                        <input type="hidden" id="mid" name="mid" value={{ match.mid }} size="1">#}
+{#                                        <input type="hidden" id="ans" name="ans" value='0' size="1">#}
+{#                                        <input type="submit" value="Décliner" class="btn btn-outline-secondary">#}
+{#                                    </form>#}
+{#                                </td>#}
+                            </div>
+                        </tr>
+
+                        {% set i = i + 1 %}
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+            {% if matchs_news %}
+                <div class="container mt-5">
+
+                <h3>Matchs à répondre</h3>
+
+                <table class="table table-striped" id="tableProposals">
+                    <thead>
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Ressource</th>
+                        <th scope="col">Propositions</th>
+                        <th scope="col">User</th>
+                        <th colspan="2" scope="col">Réponse</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# un Match = [user -> proposal -> ressource ->..] #}
+                    <script> var i = 0 </script>
+                    {% set i = 0 %}
+
+                    {% for match in matchs_news %}
+                        {{ dump(match) }}
+                            <tr>
+{#                                {{ dump(match) }}#}
+                                <td rowspan="2">{{ user.userName }}</td>
+                                {# La ressource #}
+                                <td>
+                                    &#8594; {{ match.ressourceout.category.name }} :
+                                    {% for ra in match.ressourceout.ressourceAttributes %}
+                                        {{ ra.value }}
+                                    {% endfor %}
+                                </td>
+                                {# la proposition #}
+                                <td> Quantité : {{ match.proposaloutR.quantity }}<br> Localisation : {{ match.proposaloutR.location }}</td>
+                                <td> &#8594; {{ match.proposaloutR.author.username }}</td>
+
+                            </tr>
+                            <tr>
+                                <td width="33%">
+                                    &#8592; {{ match.ressourcein.category.name }} :
+                                    {% for ra in match.ressourcein.ressourceAttributes %}
+                                        {{ ra.value }}
+                                    {% endfor %}
+                                </td>
+                                <td>Quantité : {{ match.proposalinP.quantity }} <br> Localisation
+                                    : {{ match.proposalinP.location }}</td>
+                                <td>&#8592;{{ match.proposalinP.author.username }}</td>
+
+                                <div class="answer">
+                                    <td id={{ i }}>
+                                        {#                                 POUR ENREGISTRER LA REPONSE DU MATCH AVEC LES PARAMETRES REQUIS#}
+                                        <iframe name="votar" style="display:none;"></iframe>
+                                        <form action="http://localhost:8000/match" method="post"
+                                              onsubmit="afficheAccept({{ i }})">
+                                            <input type="hidden" id="ans" name="ans" value='1' size="1">
+                                            <input type="hidden" id="mid" name="mid" value={{ match.mid }} size="1">
+                                            <input type="submit" value="Accepter" class="btn btn-outline-primary">
+                                        </form>
+                                        <br>
+                                        <form action="http://localhost:8000/match" method="post"
+                                              onsubmit="afficheDecline({{ i }})">
+                                            <input type="hidden" id="mid" name="mid" value={{ match.mid }} size="1">
+                                            <input type="hidden" id="ans" name="ans" value='0' size="1">
+                                            <input type="submit" value="Décliner" class="btn btn-outline-secondary">
+                                        </form>
+                                    </td>
+                                </div>
+                            </tr>
+
+                        {% set i = i + 1 %}
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+                </div>
+
+            {% endif %}
 
 
-        <div class="container mt-5">
-            <h3>Matchs en attentes</h3>
-
+        {% if matchs_accepted %}
+            <div class="container mt-5">
+               <h3>Matchs acceptés</h3>
+{#                {% for ma in matchs_accepted %}#}
+{#                    {{ ma.mid }} <br>#}
+{#                {% endfor %}#}
+{#            </div>#}
             <table class="table table-striped" id="tableProposals">
                 <thead>
                 <tr>
@@ -19,7 +177,7 @@
                     <th scope="col">Ressource</th>
                     <th scope="col">Propositions</th>
                     <th scope="col">User</th>
-                    <th colspan="2" scope="col">Réponse</th>
+{#                    <th colspan="2" scope="col">Modifier la réponse</th>#}
                 </tr>
                 </thead>
                 <tbody>
@@ -27,55 +185,50 @@
                 <script> var i = 0 </script>
                 {% set i = 0 %}
 
-                {% for match in matchs %}
+                {% for match in matchs_accepted %}
                     <tr>
+{#                        {{ dump(match) }}#}
                         <td rowspan="2">{{ user.userName }}</td>
                         {# La ressource #}
                         <td>
-                            &#8594; {{ match[2].category.name }} :
-                            {% for ra in match[2].ressourceAttributes %}
+                            &#8594; {{ match.ressourcein.category.name }} :
+                            {% for ra in match.ressourceout.ressourceAttributes %}
                                 {{ ra.value }}
                             {% endfor %}
                         </td>
                         {# la proposition #}
-                        <td> Quantité : {{ match[1].quantity }}<br> Localisation : {{ match[1].location }}</td>
-                        <td> &#8594; {{ match[4].username }}</td>
+                        <td> Quantité : {{ match.proposaloutR.quantity }}<br> Localisation : {{ match.proposaloutR.location }}</td>
+                        <td> &#8594; {{ match.proposaloutR.author.username }}</td>
 
                     </tr>
                     <tr>
                         <td width="33%">
-                            &#8592; {{ match[match|length-3].category.name }} :
-                            {% for ra in match[match|length-3].ressourceAttributes %}
+                            &#8592; {{ match.ressourcein.category.name }} :
+                            {% for ra in match.ressourcein.ressourceAttributes %}
                                 {{ ra.value }}
                             {% endfor %}
                         </td>
-                        <td>Quantité : {{ match[match|length-2].quantity }} <br> Localisation
-                            : {{ match[match|length-2].location }}</td>
-                        <td>&#8592;{{ match[match|length-1].username }}</td>
+                        <td>Quantité : {{ match.proposalinP.quantity }} <br> Localisation
+                            : {{ match.proposalinP.location }}</td>
+                        <td>&#8592;{{ match.proposalinP.author.username }}</td>
 
                         <div class="answer">
-                            <td id={{ i }}>
-                                {# POUR ENREGISTRER LA REPONSE DU MATCH AVEC LES PARAMETRES REQUIS #}
-                                <iframe name="votar" style="display:none;"></iframe>
-                                <form action="http://localhost:3000/matchs" method="post" target="votar"
-                                      onsubmit="afficheAccept({{ i }})">
-                                    <input type="hidden" id="userId" name="userId" value={{ user.username }} size="1">
-                                    <input type="hidden" id="ans" name="ans" value='1' size="1">
-                                    <input type="hidden" id="propId1" name="propId1" value={{ match[1].id }} size="1">
-                                    <input type="hidden" id="propId2" name="propId2"
-                                           value={{ match[match|length-2].id }} size="1">
-                                    <input type="submit" value="Accepter" class="btn btn-outline-primary">
-                                </form>
-                                <br>
-                                <form action="http://localhost:3000/matchs" method="post" target="votar"
-                                      onsubmit="afficheDecline({{ i }})">
-                                    <input type="hidden" id="userId" name="userId" value={{ user.username }} size="1">
-                                    <input type="hidden" id="ans" name="ans" value='1' size="1">
-                                    <input type="hidden" id="propId1" name="propId1" value={{ match[1].id }} size="1">
-                                    <input type="hidden" id="propId2" name="propId2"
-                                           value={{ match[match|length-2].id }} size="1">
-                                    <input type="submit" value="Décliner" class="btn btn-outline-secondary">
-                                </form>
+{#                            <td id={{ i }}>#}
+                                {#                                 POUR ENREGISTRER LA REPONSE DU MATCH AVEC LES PARAMETRES REQUIS#}
+{#                                <iframe name="votar" style="display:none;"></iframe>#}
+{#                                <form action="http://localhost:8000/match" method="post"#}
+{#                                      onsubmit="afficheAccept({{ i }})">#}
+{#                                    <input type="hidden" id="ans" name="ans" value='1' size="1">#}
+{#                                    <input type="hidden" id="mid" name="mid" value={{ match.mid }} size="1">#}
+{#                                    <input type="submit" value="Accepter" class="btn btn-outline-primary">#}
+{#                                </form>#}
+{#                                <br>#}
+{#                                <form action="http://localhost:8000/match" method="post"#}
+{#                                      onsubmit="afficheDecline({{ i }})">#}
+{#                                    <input type="hidden" id="mid" name="mid" value={{ match.mid }} size="1">#}
+{#                                    <input type="hidden" id="ans" name="ans" value='0' size="1">#}
+{#                                    <input type="submit" value="Décliner" class="btn btn-outline-secondary">#}
+{#                                </form>#}
                             </td>
                         </div>
                     </tr>
@@ -86,29 +239,88 @@
 
                 </tbody>
             </table>
-
-            <div class="container mt-5">
-                <h3>Matchs en détails</h3>
-                {% for match in matchs %}
-                    {% for e in match %}
-                        {% if loop.index == 1 %}
-                            {{ e.username }}
-                        {% elseif loop.index %2 != 1 %}
-                            -> {{ e.quantity }} {{ e.location }} ->
-                        {% elseif loop.index %2 == 1 and loop.index %4 != 1 %}
-                            {% for ra in e.ressourceAttributes %}
-                                {{ ra.value }}
-                            {% endfor %}
-                            {{ e.category.name }}
-                        {% elseif loop.index %4 == 1 %}
-                            {{ e.username }}
-                        {% endif %}
-                    {% endfor %}
-                    <br>
-                {% endfor %}
             </div>
+        {% endif %}
 
-        </div>
+        {% if matchs_declined %}
+            <div class="container mt-5">
+                <h3>Matchs déclinés</h3>
+                <table class="table table-striped" id="tableProposals">
+                    <thead>
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Ressource</th>
+                        <th scope="col">Propositions</th>
+                        <th scope="col">User</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# un Match = [user -> proposal -> ressource ->..] #}
+                    <script> var i = 0 </script>
+                    {% set i = 0 %}
+
+                    {% for match in matchs_declined %}
+                        <tr>
+                            {#                        {{ dump(match) }}#}
+                            <td rowspan="2">{{ user.userName }}</td>
+                            {# La ressource #}
+                            <td>
+                                &#8594; {{ match.ressourcein.category.name }} :
+                                {% for ra in match.ressourceout.ressourceAttributes %}
+                                    {{ ra.value }}
+                                {% endfor %}
+                            </td>
+                            {# la proposition #}
+                            <td> Quantité : {{ match.proposaloutR.quantity }}<br> Localisation : {{ match.proposaloutR.location }}</td>
+                            <td> &#8594; {{ match.proposaloutR.author.username }}</td>
+
+                        </tr>
+                        <tr>
+                            <td width="33%">
+                                &#8592; {{ match.ressourcein.category.name }} :
+                                {% for ra in match.ressourcein.ressourceAttributes %}
+                                    {{ ra.value }}
+                                {% endfor %}
+                            </td>
+                            <td>Quantité : {{ match.proposalinP.quantity }} <br> Localisation
+                                : {{ match.proposalinP.location }}</td>
+                            <td>&#8592;{{ match.proposalinP.author.username }}</td>
+
+                            </div>
+                        </tr>
+
+                        {% set i = i + 1 %}
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+
+
+{#            <div class="container mt-5">#}
+{#                <h3>Matchs en détails</h3>#}
+{#                {% for match in matchs_accepted %}#}
+{#                    {% for e in match %}#}
+{#                        {% if loop.index == 1 %}#}
+{#                            {{ e.username }}#}
+{#                        {% elseif loop.index %2 != 1 %}#}
+{#                            -> {{ e.quantity }} {{ e.location }} ->#}
+{#                        {% elseif loop.index %2 == 1 and loop.index %4 != 1 %}#}
+{#                            {% for ra in e.ressourceAttributes %}#}
+{#                                {{ ra.value }}#}
+{#                            {% endfor %}#}
+{#                            {{ e.category.name }}#}
+{#                        {% elseif loop.index %4 == 1 %}#}
+{#                            {{ e.username }}#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{#                    <br>#}
+{#                {% endfor %}#}
+{#            </div>#}
+
     {% endif %}
 
 
@@ -124,9 +336,6 @@
         //     $("#confirmed").load("match/confirmed")
         //
         // })
-
-
-        //fdsergegregre
 
         function afficheAccept(i) {
             $(document).ready(function () {

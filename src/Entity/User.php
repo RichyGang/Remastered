@@ -49,10 +49,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $proposals_asked;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MatchEntity::class, mappedBy="user")
+     */
+    private $matchs;
+
     public function __construct()
     {
         $this->proposals = new ArrayCollection();
         $this->proposals_asked = new ArrayCollection();
+        $this->matchs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +197,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->proposals_asked->removeElement($proposalsAsked)) {
             $proposalsAsked->removeAsker($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MatchEntity[]
+     */
+    public function getMatchs(): Collection
+    {
+        return $this->matchs;
+    }
+
+    public function addMatch(MatchEntity $match): self
+    {
+        if (!$this->matchs->contains($match)) {
+            $this->matchs[] = $match;
+            $match->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(MatchEntity $match): self
+    {
+        if ($this->matchs->removeElement($match)) {
+            // set the owning side to null (unless already changed)
+            if ($match->getUser() === $this) {
+                $match->setUser(null);
+            }
         }
 
         return $this;

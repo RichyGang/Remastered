@@ -211,7 +211,7 @@ class ProposalController extends AbstractController
                     $proposalDirection = 'NEED';
                 }
                 elseif ($proposalDirection == 1){
-                    $proposalDirection = 'OFFEREDBY';
+                    $proposalDirection = 'OFFER';
                 }
                 dump($proposalDirection);
 
@@ -283,7 +283,34 @@ class ProposalController extends AbstractController
             $offer_or_need = $form->getData()->getOfferOrNeed();
             $quantity = $form->getData()->getQuantity();
             $location = $form->getData()->getLocation();
-//            $proposal_picture = $form->getData()->getProposalPicture();
+//            $proposalPicture = $form->getData()->getProposalPicture();
+
+            // AJOUT DE LA PHOTO DE LA RESSOURCE
+            /** @var UploadedFile $brochureFile */
+            $proposalPicture = $form->get('proposal_picture')->getData();
+
+            // this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($proposalPicture) {
+                $originalFilename = pathinfo($proposalPicture->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$proposalPicture->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $proposalPicture->move(
+                        $this->getParameter('picture_proposal_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    dump($e->getMessage());
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $proposal_added->setProposalPicture($newFilename);
+            }
 
             $ressource = $proposal->getRessource();
 
@@ -329,7 +356,7 @@ class ProposalController extends AbstractController
                     $proposalDirection = 'NEED';
                 }
                 elseif ($proposalDirection == 1){
-                    $proposalDirection = 'OFFEREDBY';
+                    $proposalDirection = 'OFFER';
                 }
                 dump($proposalDirection);
 
